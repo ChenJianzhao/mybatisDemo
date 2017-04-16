@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.demo.mapper.BlogMapper">
+
+    <sql id="selectBlog" >
+        select blog.FID id, blog.FTitle title, blog.FContent content, blog.FDate date, blog.FAuthorID author_id,
+                u.FUsername author_username, u.FTruename author_truename
+    </sql>
+
+    <select id="get" resultMap="blogMap">
+        <include refid="selectBlog" />
+        from T_Blog blog join T_User u on u.FID = blog.FAuthorid
+        where blog.FID = #{id}
+    </select>
+
+    <resultMap id="blogMap" type="Blog" autoMapping="true">
+        <association property="author" javaType="User" columnPrefix="author_" autoMapping="true"/>
+    </resultMap>
+
+    <select id="getBlogWithComments" resultMap="blogAndCommMap" >
+        <include refid="selectBlog" />
+        , comm.FID comm_id, comm.FTitle comm_title, comm.FContent comm_content, comm.FDate comm_date
+        from T_Blog blog
+        join T_User u on u.FID = blog.FAuthorid
+        join T_Comment comm on comm.FBlogID = blog.FID
+        where blog.FID = #{id}
+    </select>
+
+    <resultMap id="blogAndCommMap" type="Blog" autoMapping="true">
+        <id property="id" column="id" />
+        <association property="author" javaType="User" columnPrefix="author_" autoMapping="true">
+            <id property="id" column="id" />
+        </association>
+        <collection property="comments" column="id" ofType="Comment" columnPrefix="comm_" autoMapping="true" >
+            <id property="id" column="id" />
+        </collection>
+    </resultMap>
+</mapper>
