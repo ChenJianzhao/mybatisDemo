@@ -16,10 +16,6 @@
         where blog.FID = #{id}
     </select>
 
-    <resultMap id="blogMap" type="Blog" autoMapping="true">
-        <association property="author" javaType="User" columnPrefix="author_" autoMapping="true"/>
-    </resultMap>
-
     <select id="getBlogWithComments" resultMap="blogAndCommMap" >
         <include refid="selectBlog" />
         , comm.FID comm_id, comm.FTitle comm_title, comm.FContent comm_content, comm.FDate comm_date
@@ -28,6 +24,11 @@
         join T_Comment comm on comm.FBlogID = blog.FID
         where blog.FID = #{id}
     </select>
+
+
+    <resultMap id="blogMap" type="Blog" autoMapping="true">
+        <association property="author" javaType="User" columnPrefix="author_" autoMapping="true"/>
+    </resultMap>
 
     <resultMap id="blogAndCommMap" type="Blog" autoMapping="true">
         <id property="id" column="id" />

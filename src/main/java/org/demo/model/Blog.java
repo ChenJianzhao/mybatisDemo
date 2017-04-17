@@ -60,7 +60,6 @@ public class Blog extends CoreBase{
 
     @Override
     public String toString() {
-        return "title: " + title + ",content: [" + content + "]" + ",Date: " + date
-                + "Author :" + author.getUsername();
+        return  "Blog: " + title + " | " + content + " | "  + date + " | " + author.getUsername();
     }
 }

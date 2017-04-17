@@ -47,6 +47,6 @@ public class Comment extends CoreBase {
 
     @Override
     public String toString() {
-        return title + " | " + content + " | " + date;
+        return "Comment: " + title + " | " + content + " | " + date;
     }
 }
