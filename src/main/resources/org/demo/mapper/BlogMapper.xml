@@ -13,7 +13,7 @@
     <select id="get" resultMap="blogMap">
         <include refid="selectBlog" />
         from T_Blog blog join T_User u on u.FID = blog.FAuthorid
-        where blog.FID = #{id}
+        where blog.FID = #{fid}
     </select>
 
     <select id="getBlogWithComments" resultMap="blogAndCommMap" >
@@ -39,4 +39,12 @@
             <id property="id" column="id" />
         </collection>
     </resultMap>
+
+    <select id="selectOne" resultType="Blog" resultMap="blogMap">
+        ${sql}
+    </select>
+
+    <!--<select id="selectOne" resultType="Blog" resultMap="blogMap">-->
+        <!--${sql.replaceAll("#\\{(\\s+)?","#{param.")}-->
+    <!--</select>-->
 </mapper>

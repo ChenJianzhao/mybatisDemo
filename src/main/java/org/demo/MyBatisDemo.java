@@ -1,5 +1,6 @@
 package org.demo;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
@@ -11,7 +12,9 @@ import org.demo.model.Comment;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pc on 2017/4/13.
@@ -32,7 +35,7 @@ public class MyBatisDemo {
         SqlSession session = sqlSessionFactory.openSession();
         try {
 
-            testSQLBuilder(session);
+            testResultMap(session);
 
         } finally {
             session.close();
@@ -49,9 +52,16 @@ public class MyBatisDemo {
             SELECT("blog.FID id, blog.FTitle title, blog.FContent content, blog.FDate date, " +
                     "blog.FAuthorID author_id, " +
                     "u.FUsername author_username, u.FTruename author_truename");
-            FROM("from T_Blog blog join T_User u on u.FID = blog.FAuthorid ");
-            WHERE(" where blog.FID = ? ");
+            FROM(" T_Blog blog join T_User u on u.FID = blog.FAuthorid ");
+            WHERE(" blog.FID = #{id} ");
         }}.toString();
+
+        BlogMapper mapper = session.getMapper(BlogMapper.class);
+        Map<String,Object> param =  new HashMap<String,Object>();
+//        param.put("id", 1);
+
+        Blog blog = mapper.selectOne(sql,1);
+        System.out.println(blog);
 
     }
 
@@ -61,8 +71,8 @@ public class MyBatisDemo {
      */
     private static void testResultMap( SqlSession session) {
         BlogMapper mapper = session.getMapper(BlogMapper.class);
-//            Blog blog = mapper.get(1);
-        Blog blog = mapper.getBlogWithComments(1);
+            Blog blog = mapper.get(1);
+//        Blog blog = mapper.getBlogWithComments(1);
         System.out.println(blog);
 
         List<Comment> comments = blog.getComments();
