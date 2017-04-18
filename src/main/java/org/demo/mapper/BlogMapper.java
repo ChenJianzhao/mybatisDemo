@@ -8,4 +8,6 @@ import org.demo.model.Blog;
 public interface BlogMapper extends MapperBase<Blog>{
 
     Blog getBlogWithComments(Integer id);
+
+    Blog getBlogWithAuthor(Integer id);
 }

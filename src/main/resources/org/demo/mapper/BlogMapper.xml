@@ -5,17 +5,44 @@
 
 <mapper namespace="org.demo.mapper.BlogMapper">
 
+    <!-- get 仅仅自有属性 -->
+    <select id="get" resultMap="singleBlog" >
+        select * from T_Blog where FID = #{id};
+    </select>
+
+    <!-- 自有属性结果映射 -->
+    <resultMap id="singleBlog" type="Blog" >
+        <id property="id" column="FID" />
+        <result property="title" column="FTitle" />
+        <result property="content" column="FContent" />
+        <result property="date" column="FDate" />
+    </resultMap>
+
+    <insert id="add" useGeneratedKeys="true" keyColumn="FID" >
+        insert into T_Blog (FTitle, FContent, FDate) values (#{title}, #{content}, #{date});
+    </insert>
+
+    <update id="update" >
+        update T_Blog set FTitle = #{title} where FID = #{id};
+    </update>
+
+    <delete id="delete" >
+        delete from T_Blog where FID = #{id};
+    </delete>
+    <!-- test ref sql -->
     <sql id="selectBlog" >
         select blog.FID id, blog.FTitle title, blog.FContent content, blog.FDate date, blog.FAuthorID author_id,
                 u.FUsername author_username, u.FTruename author_truename
     </sql>
 
-    <select id="get" resultMap="blogMap">
+    <!-- 关联查询 Author -->
+    <select id="getBlogWithAuthor" resultMap="blogMap">
         <include refid="selectBlog" />
         from T_Blog blog join T_User u on u.FID = blog.FAuthorid
         where blog.FID = #{id}
     </select>
 
+    <!-- 关联查询 Comment -->
     <select id="getBlogWithComments" resultMap="blogAndCommMap" >
         <include refid="selectBlog" />
         , comm.FID comm_id, comm.FTitle comm_title, comm.FContent comm_content, comm.FDate comm_date
@@ -25,11 +52,12 @@
         where blog.FID = #{id}
     </select>
 
-
+    <!-- test association resultMap -->
     <resultMap id="blogMap" type="Blog" autoMapping="true">
         <association property="author" javaType="User" columnPrefix="author_" autoMapping="true"/>
     </resultMap>
 
+    <!-- test collection resultMap -->
     <resultMap id="blogAndCommMap" type="Blog" autoMapping="true">
         <id property="id" column="id" />
         <association property="author" javaType="User" columnPrefix="author_" autoMapping="true">
@@ -39,4 +67,11 @@
             <id property="id" column="id" />
         </collection>
     </resultMap>
+
+
+
+    <!-- select for SQL Builder -->
+    <select id="selectAllBySQL" resultMap="blogMap" >
+        ${sql}
+    </select>
 </mapper>
