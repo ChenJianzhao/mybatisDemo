@@ -37,13 +37,18 @@ public class MyBatisDemo {
         SqlSession session = sqlSessionFactory.openSession();
         try {
 
-            testSQLBuilder(session);
+            testSelectOne(session);
 
         } finally {
             session.close();
         }
     }
 
+    // ******************************************************** //
+    /**
+     * Test CRUD
+     * @param session session
+     */
     private static void testGet( SqlSession session) {
         BlogMapper mapper = session.getMapper(BlogMapper.class);
         Blog blog = mapper.get(1);
@@ -77,36 +82,14 @@ public class MyBatisDemo {
         session.commit();
     }
 
-    /**
-     * 测试 SQL 构建器
-     * @param session 会话
-     */
-    private static void testSQLBuilder( SqlSession session) {
 
-        String sql = new SQL(){{
-            SELECT("blog.FID id, blog.FTitle title, blog.FContent content, blog.FDate date, " +
-                    "blog.FAuthorID author_id, " +
-                    "u.FUsername author_username, u.FTruename author_truename");
-            FROM(" T_Blog blog join T_User u on u.FID = blog.FAuthorid ");
-            WHERE(" blog.FID = #{id} ");
-        }}.toString();
-
-        BlogMapper mapper = session.getMapper(BlogMapper.class);
-        Map<String,Object> param =  new HashMap<String,Object>();
-//        param.put("id", 1);
-
-        Blog blog = mapper.selectOne(sql,1);
-        System.out.println(blog);
-
-    }
-
+    // ******************************************************** //
     /**
      * 测试 association 和 collection ResultMap
-     * @param session
+     * @param session session
      */
-    private static void testResultMap( SqlSession session) {
+    private static void testAssociation( SqlSession session) {
         BlogMapper mapper = session.getMapper(BlogMapper.class);
-//            Blog blog = mapper.get(1);
         Blog blog = mapper.getBlogWithComments(1);
         System.out.println(blog);
 
@@ -118,7 +101,32 @@ public class MyBatisDemo {
         }
     }
 
-    private static void testSelectAllBySQL(SqlSession session) {
+
+    // ******************************************************** //
+    /**
+     * 测试 SQL 构建器
+     * @param session session
+     */
+    private static void testSelectOne( SqlSession session) {
+
+        String sql = new SQL(){{
+            SELECT("blog.FID id, blog.FTitle title, blog.FContent content, blog.FDate date, " +
+                    "blog.FAuthorID author_id, " +
+                    "u.FUsername author_username, u.FTruename author_truename");
+            FROM(" T_Blog blog join T_User u on u.FID = blog.FAuthorid ");
+            WHERE(" blog.FID = #{id} ");
+        }}.toString();
+
+        BlogMapper mapper = session.getMapper(BlogMapper.class);
+        Map<String,Object> param =  new HashMap<String,Object>();
+        param.put("id", 1);
+
+        Blog blog = mapper.selectOneBySQL(sql,param);
+        System.out.println(blog);
+
+    }
+
+    private static void testSelectAll(SqlSession session) {
         String sql = new SQL() {{
             SELECT("select blog.FID id, blog.FTitle title, blog.FContent content, blog.FDate date, blog.FAuthorID author_id,\n" +
                     "                u.FUsername author_username, u.FTruename author_truename");
