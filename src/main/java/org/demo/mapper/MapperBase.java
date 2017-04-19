@@ -2,6 +2,7 @@ package org.demo.mapper;
 
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,7 +18,8 @@ public interface MapperBase<T> {
 
     Integer delete(Integer id);
 
-    T selectOne(@Param("sql") String sql, @Param("id") Integer id);
+    T selectOneBySQL(@Param("sql") String sql, @Param("param") Map<String,Object> param);
 
-//    T selectOne(@Param("sql") String sql, @Param("param")Map<String,Object> paramMap);
+    List<T> selectAllBySQL(@Param("sql") String sql, @Param("param") Map<String,Object> param);
+
 }
