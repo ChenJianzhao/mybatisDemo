@@ -4,12 +4,15 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
 
-    <!--包含以下子元素（有严格的顺序）：-->
+    <!--
+    generatorConfiguration 包含以下子元素（有严格的顺序）：
+        1. <properties> (0个或1个)
+        2. <classPathEntry> (0个或多个)
+        3. <context> (1个或多个)
+    -->
 
-    <!-- 【1】<properties> (0个或1个)-->
-    <!--<properties>-->
-
-    <!--</properties>-->
+    <!--&lt;!&ndash; 【1】<properties> (0个或1个)&ndash;&gt;-->
+    <!--<properties resource="./jdbc.properties" />-->
 
     <!--
         【2】<classPathEntry> (0个或多个)
@@ -26,12 +29,16 @@
         【必选属性】
             id: 用来唯一确定一个<context>元素，该id属性可以在运行MBG的使用。
         【可选属性】
-            defaultModelType: 这个属性很重要，这个属性定义了MBG如何生成实体类。 conditional | flat | hierarchical
-            targetRuntime: MyBatis3(这是默认值) | MyBatis3Simple(不生成和Example) | Ibatis2Java2 | Ibatis2Java5
-            introspectedColumnImpl:
+            1. defaultModelType: 这个属性很重要，这个属性定义了MBG如何生成实体类。
+                - conditional:  （默认值）,和的hierarchical类似，不同：若单独的类只包含一个字段，将不会生成一个单独的类。如：主键只有一个字段,那么不会为该字段生成单独的实体类。
+                - flat:         （推荐）该模型为每一张表只生成一个实体类。
+                - hierarchical： 如果表有主键,那么该模型会产生一个单独的主键实体类,如果表还有BLOB字段， 则会为表生成一个包含所有BLOB字段的单独的实体类,然后为所有其他的字段生成一个单独的实体类。 MBG会在所有生成的实体类之间维护一个继承关系。
+            2. targetRuntime: MyBatis3(这是默认值) | MyBatis3Simple(不生成和Example) | Ibatis2Java2 | Ibatis2Java5
+            3. introspectedColumnImpl:
      -->
     <context id="default" defaultModelType="flat" targetRuntime="MyBatis3" >
         <!--
+            context 的子元素
             【3.1】<property> (0个或多个)
             下面继续看<property>支持的属性：
                 1. autoDelimitKeywords  自动给表名或字段名添加"分隔符"
@@ -46,6 +53,7 @@
         <property name="endingDelimiter" value="`"/>
 
         <!--【3.2】<plugin> 元素,0个或者多个 -->
+
         <!--
             【3.3】<commentGenerator> 元素, 该元素最多可以配置1个。
             该元素有一个可选属性type,可以指定用户的实现类，该类需要实现org.mybatis.generator.api.CommentGenerator接口。
@@ -103,8 +111,8 @@
             【3.7】 <sqlMapGenerator> 元素，该元素可选，最多配置一个
             如果targetRuntime目标是 MyBatis3，只有当<javaClientGenerator>需要XML时，该元素必须配置一个。
             如果没有配置<javaClientGenerator>，则使用以下的规则：
-                如果指定了一个<sqlMapGenerator>，那么MBG将只生成XML的SQL映射文件和实体类。
-                如果没有指定<sqlMapGenerator>，那么MBG将只生成实体类。
+                - 如果指定了一个<sqlMapGenerator>，那么MBG将只生成XML的SQL映射文件和实体类。
+                - 如果没有指定<sqlMapGenerator>，那么MBG将只生成实体类。
 
             必选属性
                 1. targetPackage:生成实体类存放的包名，一般就是放在该包下。实际还会受到其他配置的影响(<table>中会提到)。

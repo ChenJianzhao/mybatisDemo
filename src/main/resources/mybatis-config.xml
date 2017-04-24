@@ -22,7 +22,7 @@
         <!-- <typeAlias alias="Author" type="domain.blog.Author"/> -->
 
         <!--也可以指定一个包名，MyBatis 会在包名下面搜索需要的 Java Bean-->
-        <package name="org.demo"/>
+        <package name="org.demo.model.mbg"/>
     </typeAliases>
 
 
