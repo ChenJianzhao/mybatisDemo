@@ -12,12 +12,14 @@
         <property name="password" value="" />
     </properties>
 
+
+    <!-- 【*】MyBatis 中极为重要的调整设置，它们会改变 MyBatis 的运行时行为。 -->
     <!--<settings>-->
         <!--<setting name="logImpl" value="LOG4J"/>-->
     <!--</settings>-->
-    <!--
-    【typeAliases 类型命名】
-    -->
+
+
+    <!-- 【*】typeAliases 类型命名 -->
     <typeAliases>
         <!-- <typeAlias alias="Author" type="domain.blog.Author"/> -->
 
@@ -27,25 +29,24 @@
 
 
 
-    <!--
-    【typeHandlers 类型处理器】
-    -->
-    <!-- 实现 org.apache.ibatis.type.TypeHandler 接口， 或继承一个很便利的类 org.apache.ibatis.type.BaseTypeHandler， 然后可以选择性地将它映射到一个 JDBC 类型。 -->
+    <!-- 【*】typeHandlers 类型处理器 -->
+    <!-- 实现 【org.apache.ibatis.type.TypeHandler】 接口， 或继承一个很便利的类 【org.apache.ibatis.type.BaseTypeHandler】，
+        然后可以选择性地将它映射到一个 JDBC 类型。 -->
     <typeHandlers>
         <!--<typeHandler handler="org.mybatis.example.ExampleTypeHandler"/>-->
     </typeHandlers>
 
 
 
-    <!-- 默认的对象工厂需要做的仅仅是实例化目标类，要么通过默认构造方法，
-        要么在参数映射存在的时候通过参数构造方法来实例化。
+    <!-- 【*】对象工厂
+        默认的对象工厂需要做的仅仅是实例化目标类，要么通过默认构造方法，要么在参数映射存在的时候通过参数构造方法来实例化。
         如果想覆盖对象工厂的默认行为，则可以通过创建自己的对象工厂来实现，继承 DefaultObjectFactory 。-->
-    <!--
-    <objectFactory type="org.mybatis.example.ExampleObjectFactory">
-        <property name="someProperty" value="100"/>
-    </objectFactory>
-    -->
+    <!--<objectFactory type="org.mybatis.example.ExampleObjectFactory">-->
+        <!--<property name="someProperty" value="100"/>-->
+    <!--</objectFactory>-->
 
+
+    <!-- 【*】上数据库下文环境，可以配置多个环境，设置一个默认的环境 -->
     <environments default="development">
         <environment id="development">
 
@@ -53,12 +54,12 @@
             <transactionManager type="JDBC"/>
 
             <!--【2】有三种内建的数据源类型（也就是 type=”[UNPOOLED|POOLED|JNDI]”）-->
-            <!--     MyBatis的数据源并不是必须的，为了方便使用延迟加载，数据源才是必须的。-->
+            <!-- MyBatis的数据源并不是必须的，为了方便使用延迟加载，数据源才是必须的。-->
             <dataSource type="POOLED">
-                <property name="driver" value="${driver}"/>
-                <property name="url" value="${url}"/>
-                <property name="username" value="${username}"/>
-                <property name="password" value="${password}"/>
+                <property name="driver"     value="${driver}"/>
+                <property name="url"        value="${url}"/>
+                <property name="username"   value="${username}"/>
+                <property name="password"   value="${password}"/>
             </dataSource>
         </environment>
     </environments>
